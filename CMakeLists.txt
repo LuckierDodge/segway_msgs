@@ -52,8 +52,8 @@ set(srv_files
 set(action_files
   "action/RosSetIapCmd.action"
 )
-rosidl_generate_interfaces(${PROJECT_NAME} 
-  ${msg_files} 
+rosidl_generate_interfaces(${PROJECT_NAME}
+  ${msg_files}
   ${srv_files}
   ${action_files}
   DEPENDENCIES  geometry_msgs std_msgs ADD_LINTER_TESTS)
