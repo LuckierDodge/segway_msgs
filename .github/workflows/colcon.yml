@@ -1,0 +1,35 @@
+name: colcon
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - { docker_image: ubuntu:22.04, ros_distribution: humble}
+          - { docker_image: ubuntu:24.04,  ros_distribution: jazzy}
+
+    container:
+      image: ${{ matrix.docker_image }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: ros-tooling/setup-ros@v0.7
+
+    - uses: ros-tooling/action-ros-ci@v0.3
+      with:
+        target-ros2-distro: ${{ matrix.ros_distribution }}
+        extra-cmake-args: "-D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}"
+        skip-tests: true
